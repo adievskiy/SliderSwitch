@@ -1,10 +1,8 @@
 package com.example.sliderswitch
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,9 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.sliderswitch.ui.theme.SliderSwitchTheme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -66,7 +62,6 @@ fun MainScreen() {
         ) {
             Text(
                 text = if (isVisible) Utils.TEXT else "",
-                modifier = Modifier,
                 textAlign = TextAlign.Justify
             )
         }
@@ -83,15 +78,14 @@ fun MainScreen() {
                 }
             )
             Button(onClick = {
-                if (!checked) {
-                    scope.launch {
-                        snackbarHostState.showSnackbar("Доступ заблокирован")
-                    }
-                } else {
-                    scope.launch {
-                        snackbarHostState.showSnackbar("Данные загружены")
-                    }
+                val message = if (checked) {
                     isVisible = true
+                    "Данные загружены"
+                } else {
+                    "Доступ заблокирован"
+                }
+                scope.launch {
+                    snackbarHostState.showSnackbar(message)
                 }
             }) { Text(text = "Прочитать") }
         }
@@ -104,7 +98,7 @@ fun TopBar() {
     TopAppBar(
         title = { Text("My Program") },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            containerColor = MaterialTheme.colorScheme.primary,
             titleContentColor = Color.White
         )
     )
